@@ -11,6 +11,8 @@ namespace io {
 		int BUFFER_SIZE;
 
 	public:
+		Buffer();
+
 		// Parameterized constructor
 		Buffer(int size);
 
