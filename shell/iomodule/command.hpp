@@ -8,10 +8,9 @@
 
 namespace io {
 
-	const std::map< std::string, std::array<int, 2> > definedCommands = { { "exit", std::array<int, 2>{0, 0} },{ "echo", std::array<int, 2>{-1, 0} },
-																	{ "who", std::array<int, 2>{0, 0} },{ "help", std::array<int, 2>{0, 0} } };
-	// in the map, the string denotes the commands while the array of integers it is mapped to denotes the number of arguments needed and whether
-	// it needs the processor to execute the commands ( 1 if true )
+	const std::map< std::string, std::string > definedCommands = { { "exit", "Exits the shell, shutting down the OS" },{ "echo", "Echos your arguments back at you" },
+																	{ "who", "Tells you who you are" },{ "help", "Displays all inbuilt commands and their description" } };
+	// in the map, the first string denotes commands while the second their description
 
 	class Command {
 	private:
@@ -19,17 +18,18 @@ namespace io {
 		std::string commd;
 		std::string* args;
 		unsigned int numArgs;
+		Shell shell;
 
 	public:
 		// parameterized constructor
-		Command(std::string);
+		Command(std::string, Shell);
 
 		std::string getString();
 
 		std::string execute();
 	};
 
-	Command parse(std::string line);
+	Command parse(std::string line, Shell shell);
 
 	// command definitions
 	std::string echo(std::string strToEcho);

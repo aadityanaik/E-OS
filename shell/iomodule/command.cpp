@@ -6,7 +6,7 @@
 #include "../shell.hpp"
 
 namespace io {
-	Command::Command(std::string line) {
+	Command::Command(std::string line, Shell callShell) {
 		std::stringstream lineStream(line);
 
 		unsigned int countArgs = 0;
@@ -30,6 +30,8 @@ namespace io {
 				break;
 			}
 		}
+
+		shell = callShell;
 	}
 
 	std::string Command::getString() {
@@ -43,13 +45,34 @@ namespace io {
 	}
 
 	std::string Command::execute() {
-		std::string string = "";
+		if (commd == "echo") {
+			std::string strToEcho = "";
+			for (int i = 0; i < numArgs; i++) {
+				strToEcho += args[i] + " ";
+			}
 
-		return string;
+			return echo(strToEcho);
+		}
+		else if (commd == "exit") {
+			exit();
+			return "";
+		}
+		else if (commd == "who") {
+			if (numArgs > 0) {
+				return "\'who\': Too many arguments";
+			}
+			return who(shell);
+		}
+		else if (commd == "help") {
+			return help();
+		}
+		else {
+			return "\'" + commd + "\': no such command";
+		}
 	}
 
-	Command parse(std::string line) {
-		return Command(line);
+	Command parse(std::string line, Shell shell) {
+		return Command(line, shell);
 	}
 
 	std::string echo(std::string strToEcho) {
@@ -66,10 +89,9 @@ namespace io {
 
 	std::string help() {
 		std::string commandList = "";
-		for (std::pair< std::string, std::array<int, 2> > pair : definedCommands) {
-			commandList += pair.first + "\n";
+		for (std::pair< std::string, std::string > pair : definedCommands) {
+			commandList += pair.first + "-  " + pair.second + "\n";
 		}
-
 		return commandList;
 	}
 }

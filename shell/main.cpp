@@ -69,19 +69,14 @@ int main() {
 			c = _getch();
 			shell.accept(c);
 			if ((int)c == 13) {
-				std::cout << "\n" << io::parse(shell.getBufferContents()).getString() << "\n";
+				std::cout << "\n" << io::parse(shell.getBufferContents(), shell).execute() << "\n";
 				break;
 			}
 			if ((int)c == 8) {
 				std::cout << "\b \b";
 			}
 		}
-
-		if (!shell.getBufferContents().compare("exit")) {
-			break;
-		}
-		else {
-			shell.clearBfr();
-		}
+		
+		shell.clearBfr();
 	}
 }
