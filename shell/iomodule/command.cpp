@@ -66,6 +66,14 @@ namespace io {
 		else if (commd == "help") {
 			return help();
 		}
+		else if (commd == "cow") {
+			if (numArgs > 0) {
+				return "\'who\': Too many arguments";
+			}
+			else {
+				return cow();
+			}
+		}
 		else {
 			return "\'" + commd + "\': no such command";
 		}
@@ -93,5 +101,10 @@ namespace io {
 			commandList += pair.first + "-  " + pair.second + "\n";
 		}
 		return commandList;
+	}
+
+	std::string cow() {
+		std::string cowString = "^__^\n(oo)\_______\n(__)\       )\\ / \\\n   ||----w |\n   ||     ||";
+		return cowString;
 	}
 }

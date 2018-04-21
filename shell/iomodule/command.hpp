@@ -9,7 +9,8 @@
 namespace io {
 
 	const std::map< std::string, std::string > definedCommands = { { "exit", "Exits the shell, shutting down the OS" },{ "echo", "Echos your arguments back at you" },
-																	{ "who", "Tells you who you are" },{ "help", "Displays all inbuilt commands and their description" } };
+																	{ "who", "Tells you who you are" },{ "help", "Displays all inbuilt commands and their description" },
+																	{"cow", "Shows an ASCII cow"} };
 	// in the map, the first string denotes commands while the second their description
 
 	class Command {
@@ -36,4 +37,5 @@ namespace io {
 	void exit();
 	std::string who(Shell& shell);
 	std::string help();
+	std::string cow();
 }
