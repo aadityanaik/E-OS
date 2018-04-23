@@ -36,9 +36,9 @@ int main()
             std::cin >> fileData;
             file_structure.addFile(fileName, fileData);
             std::cout << "File " << fileName << " added!" << std::endl;
-            fileLength = file_structure.getLength(fileName);
+            fileLength = file_structure.findSize(fileData);
             fileStart = file_structure.getLocation();
-            fat_table.make_table(fileName, fileLength, fileStart);
+            fat_table.make_table(fileName, fileStart, fileLength);
         }
         else if(addFileOption == '2' || addFileOption == 'd' || addFileOption == 'D') {
             std::string file_name_to_read;
@@ -47,10 +47,12 @@ int main()
             file_structure.readFile(file_name_to_read);
         }
         else if(addFileOption == '3' || addFileOption == 'a' || addFileOption == 'A') {
-            std::string file_name_to_append;
+            std::string file_name_to_append, data_to_append;
             std::cout << "Enter file name to append: ";
             std::cin >> file_name_to_append;
-            file_structure.appendFile(file_name_to_append);
+            std::cout << "Enter data: ";
+            std::cin >> data_to_append;
+            file_structure.appendFile(file_name_to_append, data_to_append);
         }
         else if(addFileOption == '4' || addFileOption == 'f' || addFileOption == 'F') {
             std::cout << "FAT Table: " << std::endl;

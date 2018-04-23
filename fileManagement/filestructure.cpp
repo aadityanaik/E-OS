@@ -72,23 +72,11 @@ std::string FileStructure::getData()
     return file_data;
 }
 
-std::string FileStructure::updateFile()
+void FileStructure::appendFile(std::string file_name, std::string update_data)
 {
-    std::string writeFile;
-    std::cout << "Enter data: ";
-    std::cin >> writeFile;
-
-    return writeFile;
-}
-
-void FileStructure::appendFile(std::string file_name)
-{
-    std::string update;
-    update = updateFile();
-
-    std::ofstream append(update + ".txt", std::ios::app);
+    std::ofstream append(file_name + ".txt", std::ios::app);
     if(append.is_open()) {
-        append << update;
+        append << update_data;
     }
     append.close();
     std::cout << "File updated!" << std::endl;

@@ -12,7 +12,7 @@ class FileStructure
         unsigned int findSize(std::string file_data);
         std::string getData();
         std::string updateFile();
-        void appendFile(std::string file_name);
+        void appendFile(std::string file_name, std::string update_data);
         void readFile(std::string file_name);
         void deleteFile(std::string file_name);
         void fat_table();
