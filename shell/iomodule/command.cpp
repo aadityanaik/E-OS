@@ -3,10 +3,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <sstream>
+#include <conio.h>
+#include <cctype>
 #include "../shell.hpp"
 
 namespace io {
 	Command::Command(std::string line, Shell callShell) {
+		shell = callShell;
 		std::stringstream lineStream(line);
 
 		unsigned int countArgs = 0;
@@ -30,18 +33,18 @@ namespace io {
 				break;
 			}
 		}
-
-		shell = callShell;
 	}
 
-	std::string Command::getString() {
-		std::string string = "";
-		string += "Command- " + commd + "\nArgs- ";
-		for (int i = 0; i < numArgs; i++) {
-			string += args[i] + " ";
-		}
+	bool Command::getLoginFlag() {
+		return shell.getNewLoginFlag();
+	}
 
-		return string;
+	std::string Command::getCommd() {
+		return commd;
+	}
+
+	Shell Command::getShell() {
+		return shell;
 	}
 
 	std::string Command::execute() {
@@ -85,6 +88,27 @@ namespace io {
 		}
 		else if (commd == "div") {
 			return divide(args, numArgs);
+		}
+		else if (commd == "login") {
+			if (numArgs > 0) {
+				return "\'login\': too many arguments.";
+			}
+			return login(shell);
+		}
+		else if (commd == "addusr") {
+			if (numArgs > 0) {
+				return "\'addusr\': too many arguments.";
+			}
+			return addusr(&shell);
+		}
+		else if (commd == "remusr") {
+			if (numArgs == 0) {
+				return "\'remusr\': needs user name as argument.";
+			}
+			else if (numArgs > 1) {
+				return "\'remusr\': too many arguments.";
+			}
+			return remusr(shell, args[0]);
 		}
 		else {
 			// Will require process management module
@@ -173,7 +197,7 @@ namespace io {
 			return "0";
 		}
 		else if (numArgs == 1) {
-			return args[0];
+			return std::to_string(std::stod(args[0]));
 		}
 		else if (numArgs == 2) {
 			std::string s;
@@ -220,7 +244,7 @@ namespace io {
 			return "0";
 		}
 		else if (numArgs == 1) {
-			return args[0];
+			return std::to_string(std::stod(args[0]));
 		}
 		else if (numArgs == 2) {
 			std::string s;
@@ -242,6 +266,94 @@ namespace io {
 		}
 		else {
 			return "\'div\': too many arguments";
+		}
+	}
+
+	std::string login(Shell& shell) {
+		shell.setNewLoginFlag(true);
+		return "";
+	}
+
+	std::string addusr(Shell* shell) {
+		std::string username = "";
+		char c;
+		while (true) {
+			std::cout << "\rNew Username- " << username;
+			c = _getch();
+			if ((int)c == 13) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if(username.size() > 0)
+				username.pop_back();
+			}
+			else {
+				username.push_back(c);
+			}
+		}
+
+		if (shell->getUserPasswordMap()[username] != "") {
+			return "User " + username + " already exists.";
+		}
+
+		std::string passwd, confPasswd;
+		while (true) {
+			std::cout << "\rPassword- " << std::string(passwd.length(), '*');
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (passwd.size() > 0)
+				passwd.pop_back();
+			}
+			else {
+				passwd.push_back(c);
+			}
+		}
+
+		while (true) {
+			std::cout << "\rConfirm Password- " << std::string(confPasswd.length(), '*');
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (confPasswd.size() > 0)
+				confPasswd.pop_back();
+			}
+			else {
+				confPasswd.push_back(c);
+			}
+		}
+
+		if (passwd == confPasswd) {
+			shell->addUser(username, passwd);
+			return "User " + username + " added.";
+		}
+		else {
+			return "Passwords do not match";
+		}
+	}
+
+	std::string remusr(Shell& shell, std::string username) {
+		if (username == "root") {
+			return "Cannot remove root.";
+		}
+		if (shell.getUserName() == "root") {
+			if (shell.getUserPasswordMap()[username] != "") {
+				shell.removeusr(username);
+				return "Removed " + username;
+			}
+		}
+		else {
+			return "Must be root to remove user.";
 		}
 	}
 }

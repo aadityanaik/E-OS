@@ -19,64 +19,76 @@ int main() {
 	Shell shell;
 
 	// Getting the user name
-	while(true) {
-		while (true) {
-			std::cout << "\r>>> Username- " << shell.getBufferContents();
-			c = _getch();
-			shell.accept(c);
-			if ((int)c == 13) {
-				std::cout << "\n";
-				break;
-			}
-			if ((int)c == 8) {
-				std::cout << "\b \b";
-			}
-		}
-		shell.setUserNameFromBuffer();
-
-		shell.clearBfr();
-
-		// Getting the password
-		while (true) {
-			std::cout << "\r>>> Password- " << std::string(shell.getBufferContents().length(), '*');
-			c = _getch();
-			shell.accept(c);
-			if ((int)c == 13) {
-				std::cout << "\n";
-				break;
-			}
-			if ((int)c == 8) {
-				std::cout << "\b \b";
-			}
-		}
-		shell.setPasswordFromBuffer();
-
-		shell.clearBfr();
-
-		if (!shell.login()) {
-			std::cout << "BOOOOOOO\n";
-		}
-		else {
-			break;
-		}
-	}
-
-	std::cout << "Welcome, " << shell.getUserName() << "\n";
-
 	while (true) {
 		while (true) {
-			std::cout << "\r>>> " << shell.getBufferContents();
-			c = _getch();
-			shell.accept(c);
-			if ((int)c == 13) {
-				std::cout << "\n" << io::parse(shell.getBufferContents(), shell).execute() << "\n";
+			while (true) {
+				std::cout << "\r>>> Username- " << shell.getBufferContents();
+				c = _getch();
+				shell.accept(c);
+				if ((int)c == 13) {
+					std::cout << "\n";
+					break;
+				}
+				if ((int)c == 8) {
+					std::cout << "\b \b";
+				}
+			}
+			shell.setUserNameFromBuffer();
+
+			shell.clearBfr();
+
+			// Getting the password
+			while (true) {
+				std::cout << "\r>>> Password- " << std::string(shell.getBufferContents().length(), '*');
+				c = _getch();
+				shell.accept(c);
+				if ((int)c == 13) {
+					std::cout << "\n";
+					break;
+				}
+				if ((int)c == 8) {
+					std::cout << "\b \b";
+				}
+			}
+			shell.setPasswordFromBuffer();
+
+			shell.clearBfr();
+
+			if (!shell.login()) {
+				std::cout << "Wrong credentials.\n";
+			}
+			else {
 				break;
 			}
-			if ((int)c == 8) {
-				std::cout << "\b \b";
+		}
+
+		std::cout << "Welcome, " << shell.getUserName() << "\n";
+
+		while (true) {
+			io::Command command;
+			while (true) {
+				std::cout << "\r>>> " << shell.getBufferContents();
+				c = _getch();
+				shell.accept(c);
+				if ((int)c == 13) {
+					command = io::parse(shell.getBufferContents(), shell);
+					std::cout << "\n";
+					std::cout  << command.execute() << "\n";
+					break;
+				}
+				if ((int)c == 8) {
+					std::cout << "\b \b";
+				}
+			}
+
+			shell.clearBfr();
+
+			if (command.getCommd() == "login") {
+				break;
+			}
+			else if (command.getCommd() == "addusr" || command.getCommd() == "remusr") {
+				shell.setUserPasswordMap(command.getShell().getUserPasswordMap());
 			}
 		}
-		
-		shell.clearBfr();
 	}
 }
