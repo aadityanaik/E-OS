@@ -66,15 +66,19 @@ std::string round_robin(string* args, int no_of_args) {
 	return response;
 }
 
+void initFATTable() {
+	ft.initFAT();
+}
+
 std::string createProcess(int commd_code, string* args, int no_of_args) {
     string response = "-1";
 
     if (commd_code == -1) {
         response = round_robin(args, no_of_args);
     } else if (commd_code == 1) {
-        response = "Return output of ls";
+        response = ft.ls_command();
     } else if (commd_code == 2) {
-        //response = ft.display_fat_table();
+        response = ft.display_fat_table();
     } else if (commd_code == 3) {
         response = fs.readFile(args[0]);
     } else if (commd_code == 4) {
@@ -82,9 +86,25 @@ std::string createProcess(int commd_code, string* args, int no_of_args) {
 		for (int i = 1; i < no_of_args; i++) {
 			arg2 += args[i] + " ";
 		}
-	   response = fs.appendFile(args[0], arg2);
-    } else if (commd_code = 5) {
-        response = memmgmt::displayPAT();
-    }
+	   response = fs.addFile(args[0], arg2);
+	   ft.make_table(fs);
+    } else if (commd_code == 5) {
+		std::string arg2 = "";
+		for (int i = 1; i < no_of_args; i++) {
+			arg2 += args[i] + " ";
+		}
+		response = ft.appendFile(args[0], arg2);
+		ft.shiftFiles();
+	}
+	else if (commd_code == 6) {
+		if (no_of_args > 1) {
+			return "\'rm\': Too many arguments";
+		} else if (no_of_args  == 0) {
+			return "\'rm\': Must pass file name as argument";
+		}
+		else {
+			response = ft.deleteFile(args[0]);
+		}
+	}
     return response;
 }

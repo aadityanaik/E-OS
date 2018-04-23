@@ -129,11 +129,14 @@ namespace io {
 			else if (commd == "read") {
 				commdCode = 3;
 			}
-			else if (commd == "append") {
+			else if (commd == "write") {
 				commdCode = 4;
 			}
-			else if (commd == "write") {
+			else if (commd == "append") {
 				commdCode = 5;
+			}
+			else if (commd == "rm") {
+				commdCode = 6;
 			}
 			else {
 				return "\'" + commd + "\': no such command";

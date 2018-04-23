@@ -16,6 +16,12 @@ FileStructure::FileStructure()
     generated_id = 0;
 }
 
+FileStructure::FileStructure(std::string name, int size) {
+	file_id = 0;
+	file_name = name;
+	file_size = size;
+}
+
 unsigned int FileStructure::produceFileID(std::string file_name)
 {
     unsigned int random_num;
@@ -31,21 +37,24 @@ unsigned int FileStructure::produceFileID(std::string file_name)
 
 unsigned int FileStructure::findSize(std::string file_data)
 {
-    unsigned int file_size;
-    file_size = file_data.length()/10;
-    if(file_size < 0 || file_size == 0) {
-        file_size = 1;
-    }
-
+    file_size = file_data.length()/10 + 1;
+	
     return file_size;
 }
 
+unsigned int FileStructure::getSize() {
+	return file_size;
+}
+
+std::string FileStructure::getName() {
+	return file_name;
+}
 unsigned int FileStructure::setLocation(unsigned int start)
 {
     return start;
 }
 
-void FileStructure::addFile(std::string file_name, std::string file_data)
+std::string FileStructure::addFile(std::string file_name, std::string file_data)
 {
     unsigned int generated_size;
     generated_id++;
@@ -55,7 +64,6 @@ void FileStructure::addFile(std::string file_name, std::string file_data)
     file_size = generated_size;
     file_id = generated_id * generated_size;
     this->file_name = file_name;
-    file_location = setLocation(5); //set start position on memory here
 
     std::ofstream createdFile(file_name+ ".txt");
     if(createdFile.is_open()) {
@@ -63,8 +71,10 @@ void FileStructure::addFile(std::string file_name, std::string file_data)
     }
     createdFile.close();
 
-    std::cout << "\nFile Id: " << file_id << "\nFile Name: " << file_name << "\nFile Location: " << file_location <<
-    "\nFile Size: " << file_size << std::endl;
+    std::string response =  "File Id: " + std::to_string(file_id) + "\nFile Name: " + file_name +
+    "\nFile Size: " + std::to_string(file_size) + "\n";
+
+	return response;
 }
 
 std::string FileStructure::getData()
@@ -79,6 +89,8 @@ std::string FileStructure::appendFile(std::string file_name, std::string update_
         append << update_data;
     }
     append.close();
+	file_data += update_data;
+	file_size = findSize(file_data);
     return "File updated!";
 }
 
@@ -87,18 +99,23 @@ std::string FileStructure::readFile(std::string file_name)
     std::string read_data;
     std::ifstream readFile(file_name + ".txt");
         if(readFile.is_open()) {
-            std::cout << "The data is: " << std::endl;
-            readFile >> read_data;
+			while (!readFile.eof()) {
+				std::string line;
+				std::getline(readFile, line);
+				read_data += line + "\n";
+			}
         }
         else {
-            std::cout << "File not found!" << std::endl;
+			return "File not found";
         }
         readFile.close();
 
-		return read_data;
+		file_data = read_data;
+
+	return read_data;
 }
 
-void FileStructure::deleteFile(std::string file_name)
+bool FileStructure::deleteFile(std::string file_name)
 {
     int delete_status;
     std::string file_name_with_extension = file_name + ".txt";
@@ -108,10 +125,10 @@ void FileStructure::deleteFile(std::string file_name)
 
     delete_status = remove(file_name_array.c_str());
     if(delete_status == 0) {
-        std::cout << "File " << file_name << " successfully deleted!" << std::endl;
+		return true;
     }
     else {
-        std::cout << "Unable to delete " << file_name << std::endl;
+		return false;
     }
 }
 

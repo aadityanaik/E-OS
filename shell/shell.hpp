@@ -40,6 +40,10 @@ public:
 
 	void setUserPasswordMap(std::map<std::string, std::string> userpassword);
 
+	void setUsernamePasswordMap();
+
+	void saveUserPasswordMap();
+
 	std::map<std::string, std::string> getUserPasswordMap();
 
 	void removeusr(std::string user);

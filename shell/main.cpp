@@ -5,6 +5,7 @@
 #include "iomodule\input.hpp"
 #include "iomodule\command.hpp"
 #include "shell.hpp"
+#include "../processmanagement/processmanagement.hpp"
 #include <fstream>
 
 int main() {
@@ -16,12 +17,19 @@ int main() {
 	SetConsoleMode(handleSTDIN, mode & (~ENABLE_ECHO_INPUT));
 
 	char c = '\0';
+	std::ifstream fat_file("FAT_TABLE.txt");
+	if (!fat_file.good()) {
 
-	std::ofstream fat_table_file("FAT_TABLE.csv");           //FAT_TABLE.csv must exist
-	if (fat_table_file.is_open()) {
-		fat_table_file << "File Name" << "," << "Start" << "," << "File Size" << std::endl;
+		std::ofstream fat_table_file("FAT_TABLE.txt");           //FAT_TABLE.csv must exist
+		if (fat_table_file.is_open()) {
+			fat_table_file << "File Name" << "\t" << "Start" << "\t" << "File Size" << std::endl;
+		}
+		fat_table_file.close();
+	} else {
+		initFATTable();
 	}
-	fat_table_file.close();
+
+	fat_file.close();
 
 	Shell shell;
 
