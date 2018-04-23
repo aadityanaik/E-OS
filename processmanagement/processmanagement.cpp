@@ -1,5 +1,5 @@
 #include "processmanagement.hpp"
-
+#include "../memorymanagement/memorymanagement.hpp"
 
 using namespace std;
 
@@ -69,22 +69,33 @@ std::string round_robin(string* args, int no_of_args) {
 std::string createProcess(int commd_code, string* args, int no_of_args) {
     string response = "-1";
 
-    if (commd_code == -1) {
+    if (commd_code == -1) {             //-1 round-robin
         response = round_robin(args, no_of_args);
-    } else if (commd_code == 1) {
+    } else if (commd_code == 1) {       //1 ls
         response = "Return output of ls";
-    } else if (commd_code == 2) {
+    } else if (commd_code == 2) {       //2 display FAT
         //response = ft.display_fat_table();
-    } else if (commd_code == 3) {
+    } else if (commd_code == 3) {       //3 read file
         response = fs.readFile(args[0]);
-    } else if (commd_code == 4) {
+    } else if (commd_code == 4) {       //4 append file
 		std::string arg2 = "";
 		for (int i = 1; i < no_of_args; i++) {
 			arg2 += args[i] + " ";
 		}
 	   response = fs.appendFile(args[0], arg2);
-    } else if (commd_code = 5) {
+    } else if (commd_code = 5) {        //5 write file
         response = memmgmt::displayPAT();
+    } else if (commd_code == 6) {       //6 Add process
+        Process p;
+        p.p_name = args[0];
+        p.p_size = stoi(args[1]);
+        updatePAT(p);
+        response = "Process " + p.p_name + " created; occupies " + to_string(p.p_size) + " blocks of memory.";
+    } else if (commd_code == 7) {       //7 Delete process and run compaction
+        string p_name = arg[0];
+        memmgmt::deleteProcessfromPAT(p_name);
+        memmgmt::compactionPAT();
+        response = "Removed process " + p_name "from memory. Post compaction memory size is " + to_string(memmgmt::spaceOccupiedProcess()) + " blocks";
     }
     return response;
 }
