@@ -57,7 +57,7 @@ std::string round_robin(string* args, int no_of_args) {
 					wt[i] = time_elapsed - processes[i].p_burst;
 					rem_bt[i] = 0;
 					processes[i].isComplete = true;
-					response.append("Process P" + processes[i].name + " was completed at t = " + to_string(time_elapsed) + ".\nIt waited for " + to_string(wt[i]) + " seconds.\n");
+					response.append("Quantum = 5;\nProcess P" + processes[i].name + " completed at t = " + to_string(time_elapsed) + ".\nIt waited for " + to_string(wt[i]) + " seconds.\n");
 				}
 			}
 		}
