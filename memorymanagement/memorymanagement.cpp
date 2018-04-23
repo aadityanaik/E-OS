@@ -63,7 +63,7 @@ namespace memmgmt {
 		int flag = 0;
 		for (vector<Process>::iterator i = PAT.begin(); i != PAT.end(); i++) {
 			if (i->name == p_name) {
-				//PAT.erase(PAT.begin() + i);
+				PAT.erase(PAT.begin() + i);
 				flag = -1;
 				return true;
 
