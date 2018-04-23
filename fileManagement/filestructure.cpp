@@ -72,17 +72,17 @@ std::string FileStructure::getData()
     return file_data;
 }
 
-void FileStructure::appendFile(std::string file_name, std::string update_data)
+std::string FileStructure::appendFile(std::string file_name, std::string update_data)
 {
     std::ofstream append(file_name + ".txt", std::ios::app);
     if(append.is_open()) {
         append << update_data;
     }
     append.close();
-    std::cout << "File updated!" << std::endl;
+    return "File updated!";
 }
 
-void FileStructure::readFile(std::string file_name)
+std::string FileStructure::readFile(std::string file_name)
 {
     std::string read_data;
     std::ifstream readFile(file_name + ".txt");
@@ -95,7 +95,7 @@ void FileStructure::readFile(std::string file_name)
         }
         readFile.close();
 
-        std::cout << read_data << std::endl;
+		return read_data;
 }
 
 void FileStructure::deleteFile(std::string file_name)

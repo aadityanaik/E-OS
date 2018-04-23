@@ -1,5 +1,7 @@
+#include"memorymanagement.hpp"
 #include<vector>
-#include "processmanagement.hpp"
+#include <string>
+#include "..\processmanagement\processmanagement.hpp"
 #define MAX 50
 
 using namespace std;
@@ -7,22 +9,12 @@ using namespace std;
 //bool MemProcess[MAX];
 //bool MemFile[MAX];
 
-struct Process {
-    string name;
-    int size;
-    int start_block;
-    int p_burst;
-    bool isComplete;
-
-    Process(string p_name, int p_size, int p_burst) {
-        this->name = p_name;
-        this->size = p_size;
-        this->p_burst = p_burst;
-        this->isComplete = false;
-    }
-};
-
-vector <Process> PAT;
+Process::Process(std::string p_name, int p_size, int p_burst) {
+	this->name = p_name;
+	this->size = p_size;
+	this->p_burst = p_burst;
+	this->isComplete = false;
+}
 
 int spaceOccupiedProcess(){
     // Checks total space occupied
@@ -67,7 +59,6 @@ bool deleteProcessfromPAT(string p_name){
     for(vector<Process>::iterator i = PAT.begin(); i != PAT.end(); i++){
             if(i->name == p_name){
                 //PAT.erase(PAT.begin() + i);
-                cout<<"\nDeleted\n";
                 flag =-1;
                 return true;
 
@@ -75,7 +66,6 @@ bool deleteProcessfromPAT(string p_name){
         }
 
     if(flag ==0){
-        cout<<"Process Not Found\n";
         return false;
     }
 
@@ -84,22 +74,13 @@ bool deleteProcessfromPAT(string p_name){
 string displayPAT(){
     string response = "Name\t\tSize\t\tStart\t\t\n";
     for (vector<Process>::iterator i = PAT.begin(); i != PAT.end(); i++) {
-        response.append(i->name + "\t\t" + to_string(i->size) + "\t\t" + to_string(i->start_block) + "\n");
+        response.append(i->name + "\t\t" + std::to_string(i->size) + "\t\t" + to_string(i->start_block) + "\n");
 	}
 	return response;
 }
 
-
-struct File {
-    string name;
-    int size;
-    int start_block;
-};
-
 //bool MemProcess[MAX];
 //bool MemFile[MAX];
-
-vector<File> FAT;
 
 File takeFileParamters(string f_name, int f_size){
     // Takes Process Parameters and creates a file with startblock -1
@@ -136,19 +117,14 @@ bool updateFAT(File f){
         File temp = *(FAT.end()-1);
         f.start_block = f.size + temp.start_block+temp.size -1;
         FAT.push_back(f);
-        cout<<"\nSpace Allocated\n";
 
         return true;
         }else{
-        cout<<"\nCouldn't Allocate Memory since not enough space left\n ";
-
         return false;
         }
 
     }
    }else{
-   cout<<"Size of the file larger than the system itself. \nCan Only run space optimised file\n";
-
    return false;
 
    }
@@ -163,7 +139,6 @@ bool deleteFilefromFAT(string f_name){
     for(vector<File>::iterator i = FAT.begin(); i != FAT.end(); i++){
             if(i->name == f_name){
                 FAT.erase(i);
-                cout<<"\nDeleted\n";
                 flag =-1;
                 return true;
 
@@ -171,16 +146,15 @@ bool deleteFilefromFAT(string f_name){
         }
 
     if(flag ==0){
-        cout<<"File Not Found\n";
         return false;
     }
 
 }
 
-void displayFAT(){
-    cout<<"File Name \t Size \t Start Block\t"<<endl;
+std::string displayFAT(){
+	std::string string = "";
     for (vector<File>::iterator i = FAT.begin(); i != FAT.end(); i++){
-        cout<<i->name<<"\t" << i->size<<"\t"<< i->start_block<<endl;
+        string += (i->name) + "\t" + std::to_string(i->size) +"\t"+ std::to_string(i->start_block);
         }
 }
 
