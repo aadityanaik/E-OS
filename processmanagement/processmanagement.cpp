@@ -1,19 +1,20 @@
 #include "processmanagement.hpp"
 
-#include "..\fileManagement\fat_table.h"
-#include "..\fileManagement\filestructure.h"
-#include "..\memorymanagement\memorymanagement.hpp"
 
 using namespace std;
 
-std::string round_robin(string args[], int no_of_args) {
+
+FAT_Table ft;
+FileStructure fs;
+
+std::string round_robin(string* args, int no_of_args) {
 	/**
 	/TODO: analyze arguments to create processes, assign them to memory and then execute round robin;
 	**/
 	string response;
 	string p_name;
 	int p_size, p_burst;
-	std::vector<Process> processes;
+	std::vector<memmgmt::Process> processes;
 	if (no_of_args % 3 == 0) {      //check if the number of arguments is as expected;
 		for (int i = 0; i < no_of_args; i += 3) {
 			try {
@@ -24,7 +25,7 @@ std::string round_robin(string args[], int no_of_args) {
 			catch (exception &err) {
 				return "Invalid arguments!";
 			}
-			Process p(p_name, p_size, p_burst);
+			memmgmt::Process p(p_name, p_size, p_burst);
 			processes.push_back(p);
 		}
 	}
@@ -65,7 +66,7 @@ std::string round_robin(string args[], int no_of_args) {
 	return response;
 }
 
-std::string createProcess(int commd_code, string args[], int no_of_args) {
+std::string createProcess(int commd_code, string* args, int no_of_args) {
     string response = "-1";
 
     if (commd_code == -1) {
@@ -83,7 +84,7 @@ std::string createProcess(int commd_code, string args[], int no_of_args) {
 		}
 	   response = fs.appendFile(args[0], arg2);
     } else if (commd_code = 5) {
-        response = displayPAT();
+        response = memmgmt::displayPAT();
     }
     return response;
 }

@@ -102,11 +102,11 @@ void FileStructure::deleteFile(std::string file_name)
 {
     int delete_status;
     std::string file_name_with_extension = file_name + ".txt";
-    char file_name_array[30];
+    std::string file_name_array;
 
-    std::strcpy(file_name_array, file_name_with_extension.c_str());
+	file_name_array = file_name_with_extension;
 
-    delete_status = remove(file_name_array);
+    delete_status = remove(file_name_array.c_str());
     if(delete_status == 0) {
         std::cout << "File " << file_name << " successfully deleted!" << std::endl;
     }

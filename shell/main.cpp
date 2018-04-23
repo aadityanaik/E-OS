@@ -5,6 +5,7 @@
 #include "iomodule\input.hpp"
 #include "iomodule\command.hpp"
 #include "shell.hpp"
+#include <fstream>
 
 int main() {
 	std::string EXIT_STR = "exit";
@@ -15,6 +16,12 @@ int main() {
 	SetConsoleMode(handleSTDIN, mode & (~ENABLE_ECHO_INPUT));
 
 	char c = '\0';
+
+	std::ofstream fat_table_file("FAT_TABLE.csv");           //FAT_TABLE.csv must exist
+	if (fat_table_file.is_open()) {
+		fat_table_file << "File Name" << "," << "Start" << "," << "File Size" << std::endl;
+	}
+	fat_table_file.close();
 
 	Shell shell;
 

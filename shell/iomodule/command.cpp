@@ -6,6 +6,7 @@
 #include <conio.h>
 #include <cctype>
 #include "../shell.hpp"
+#include "../../processmanagement/processmanagement.hpp"
 
 namespace io {
 	Command::Command(std::string line, Shell callShell) {
@@ -138,7 +139,7 @@ namespace io {
 				return "\'" + commd + "\': no such command";
 			}
 
-			return "";
+			return createProcess(commdCode, args, numArgs);
 		}
 	}
 

@@ -3,47 +3,45 @@
 #include <vector>
 #include <string>
 
-struct Process {
-	string name;
-	int size;
-	int start_block;
-	int p_burst;
-	bool isComplete;
+namespace memmgmt {
 
-	Process(std::string p_name, int p_size, int p_burst);
-};
+	struct Process {
+		std::string name;
+		int size;
+		int start_block;
+		int p_burst;
+		bool isComplete;
 
-struct File {
-	string name;
-	int size;
-	int start_block;
-};
+		Process(std::string p_name, int p_size, int p_burst);
+	};
 
+	struct File {
+		std::string name;
+		int size;
+		int start_block;
+	};
 
-std::vector<File> FAT;
+	int spaceOccupiedProcess();
 
-std::vector <Process> PAT;
+	bool updatePAT(Process p);
 
-int spaceOccupiedProcess();
+	bool deleteProcessfromPAT(std::string p_name);
 
-bool updatePAT(Process p);
+	std::string displayPAT();
 
-bool deleteProcessfromPAT(std::string p_name);
+	File takeFileParamters(std::string f_name, int f_size);
 
-std::string displayPAT();
+	int spaceOccupiedFile();
 
-File takeFileParamters(std::string f_name, int f_size);
+	bool updateFAT(File f);
 
-int spaceOccupiedFile();
+	bool deleteFilefromFAT(std::string f_name);
 
-bool updateFAT(File f);
+	std::string displayFAT();
 
-bool deleteFilefromFAT(std::string f_name);
+	float percentageSpace();
 
-std::string displayFAT();
+	void compactionPAT();
 
-float percentageSpace();
-
-void compactionPAT();
-
-void compactionFAT();
+	void compactionFAT();
+}
