@@ -111,6 +111,14 @@ namespace io {
 			}
 			return remusr(shell, args[0]);
 		}
+		else if (commd == "chpass") {
+			if (numArgs == 0) {
+				return chpass(shell);
+			}
+			else {
+				return "\'chpass\': too many arguments.";
+			}
+		}
 		else {
 			// Will require process management module
 
@@ -137,6 +145,15 @@ namespace io {
 			}
 			else if (commd == "rm") {
 				commdCode = 6;
+			}
+			else if (commd == "addprc") {
+				commdCode = 7;
+			}
+			else if (commd == "delprc") {
+				commdCode = 8;
+			}
+			else if (commd == "pat") {
+				commdCode = 9;
 			}
 			else {
 				return "\'" + commd + "\': no such command";
@@ -284,7 +301,7 @@ namespace io {
 		while (true) {
 			std::cout << "\rNew Username- " << username;
 			c = _getch();
-			if ((int)c == 13) {
+			if ((int)c == 13 || std::isspace(c)) {
 				std::cout << "\n";
 				break;
 			}
@@ -358,6 +375,95 @@ namespace io {
 		}
 		else {
 			return "Must be root to remove user.";
+		}
+	}
+
+	std::string chpass(Shell& shell) {
+		std::string username = "";
+		char c;
+		while (true) {
+			std::cout << "\rUsername- " << username;
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (username.size() > 0)
+					username.pop_back();
+			}
+			else {
+				username.push_back(c);
+			}
+		}
+
+		if (shell.getUserPasswordMap()[username] == "") {
+			return "User " + username + " does not exist.";
+		}
+
+		std::string passwd, confPasswd, oldPasswd;
+		while (true) {
+			std::cout << "\rOld Password- " << std::string(oldPasswd.length(), '*');
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (oldPasswd.size() > 0)
+					oldPasswd.pop_back();
+			}
+			else {
+				oldPasswd.push_back(c);
+			}
+		}
+
+		if (shell.getUserPasswordMap()[username] != oldPasswd) {
+			return "Old password does not match";
+		}
+
+		while (true) {
+			std::cout << "\rNew Password- " << std::string(passwd.length(), '*');
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (passwd.size() > 0)
+					passwd.pop_back();
+			}
+			else {
+				passwd.push_back(c);
+			}
+		}
+
+		while (true) {
+			std::cout << "\rConfirm Password- " << std::string(confPasswd.length(), '*');
+			c = _getch();
+			if ((int)c == 13 || std::isspace(c)) {
+				std::cout << "\n";
+				break;
+			}
+			if ((int)c == 8) {
+				std::cout << "\b \b";
+				if (confPasswd.size() > 0)
+					confPasswd.pop_back();
+			}
+			else {
+				confPasswd.push_back(c);
+			}
+		}
+
+		if (passwd == confPasswd) {
+			shell.changePass(username, passwd);
+			return "User " + username + "'s password changed.";
+		}
+		else {
+			return "Did not change password";
 		}
 	}
 }

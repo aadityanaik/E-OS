@@ -43,7 +43,7 @@ namespace memmgmt {
 				totalOccupied = spaceOccupiedProcess();
 				if (p.size <= MAX - totalOccupied) {
 					Process temp = *(PAT.end() - 1);
-					p.start_block = p.size + temp.start_block + temp.size;
+					p.start_block = temp.start_block + temp.size;
 					PAT.push_back(p);
 					return true;
 				}
@@ -61,19 +61,13 @@ namespace memmgmt {
 	bool deleteProcessfromPAT(string p_name) {
 		// DELETING A PROCESS FROM A PAT TABLE
 		int flag = 0;
-		for (vector<Process>::iterator i = PAT.begin(); i != PAT.end(); i++) {
+		for (vector<Process>::iterator i = PAT.begin(); i < PAT.end(); i++) {
 			if (i->name == p_name) {
-				//PAT.erase(PAT.begin() + i);
-				flag = -1;
+				PAT.erase(i);
 				return true;
-
 			}
 		}
-
-		if (flag == 0) {
-			return false;
-		}
-
+		return false;
 	}
 
 	string displayPAT() {
@@ -182,13 +176,14 @@ namespace memmgmt {
 	// COMPACTION LOGIC, HIGHLY RECOMMENDED THAT WE USE EVERYTIME
 
 	void compactionPAT() {
+		if (PAT.size() > 0) {
+			if ((PAT.begin())->start_block != 0) {
+				(PAT.begin())->start_block = 0;
+			}
+			for (vector<Process>::iterator i = (PAT.begin()); i < PAT.end() - 1; i++) {
 
-		if ((PAT.begin())->start_block != 0) {
-			(PAT.begin())->start_block = 0;
-		}
-		for (vector<Process>::iterator i = (PAT.begin() + 1); i < PAT.end() - 1; i++) {
-
-			(i + 1)->start_block = i->size + i->start_block;
+				(i + 1)->start_block = i->size + i->start_block;
+			}
 		}
 	}
 

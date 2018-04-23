@@ -99,3 +99,7 @@ void Shell::saveUserPasswordMap() {
 		}
 	}
 }
+
+void Shell::changePass(std::string username, std::string passwordNew) {
+	userpasswd[username] = passwordNew;
+}

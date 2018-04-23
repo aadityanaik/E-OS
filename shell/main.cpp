@@ -101,7 +101,7 @@ int main() {
 			if (command.getCommd() == "login") {
 				break;
 			}
-			else if (command.getCommd() == "addusr" || command.getCommd() == "remusr") {
+			else if (command.getCommd() == "addusr" || command.getCommd() == "remusr" || command.getCommd() == "chpass") {
 				shell.setUserPasswordMap(command.getShell().getUserPasswordMap());
 			}
 		}

@@ -13,6 +13,10 @@ namespace memmgmt {
 		bool isComplete;
 
 		Process(std::string p_name, int p_size, int p_burst);
+
+		bool operator == (Process p) {
+			return name == p.name;
+		}
 	};
 
 	struct File {

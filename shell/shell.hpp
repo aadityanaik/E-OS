@@ -38,6 +38,8 @@ public:
 
 	void addUser(std::string, std::string);
 
+	void changePass(std::string, std::string);
+
 	void setUserPasswordMap(std::map<std::string, std::string> userpassword);
 
 	void setUsernamePasswordMap();
